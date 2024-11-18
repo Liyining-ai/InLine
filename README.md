@@ -23,13 +23,11 @@ We find that the injectivity of attention function greatly affects the performan
 </p>
 
 Our method, **Injective Linear Attention (InLine)**:
-$$
-\mathrm{InL_K}(Q_i) = {\left[
+$$\mathrm{InL_K}(Q_i) = {\left[
         \phi(Q_i)^\top\phi(K_1),
         \cdots, 
         \phi(Q_i)^\top\phi(K_N)
-        \right]}^\top\!\! - \frac{1}{N}\sum_{s=1}^{N} \phi(Q_i)^\top\phi(K_s) + \frac{1}{N}, 
-$$
+        \right]}^\top\!\! - \frac{1}{N}\sum_{s=1}^{N} \phi(Q_i)^\top\phi(K_s) + \frac{1}{N}.$$
 
 
 ## Results

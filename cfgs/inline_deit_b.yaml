@@ -1,0 +1,6 @@
+MODEL:
+  TYPE: inline_deit_base
+  NAME: inline_deit_base
+DATA:
+  IMG_SIZE: 448
+  BATCH_SIZE: 64

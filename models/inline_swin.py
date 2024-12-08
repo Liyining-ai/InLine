@@ -206,7 +206,7 @@ class InLineAttention(nn.Module):
     """
 
     def __init__(self, dim, window_size, num_heads, qkv_bias=True, qk_scale=None, attn_drop=0., proj_drop=0., shift_size=0,
-                 kernel_func='identity', **kwargs):
+                 kernel_func='identity', **kwargs，focusing_factor=3):
 
         super().__init__()
         self.dim = dim
@@ -220,6 +220,7 @@ class InLineAttention(nn.Module):
         self.proj_drop = nn.Dropout(proj_drop)
         self.softmax = nn.Softmax(dim=-1)
         self.shift_size = shift_size
+        self.focusing_factor = focusing_factor
 
         assert kernel_func in ['identity', 'relu', 'leakyrelu', 'exp']
         if kernel_func == 'identity':
@@ -258,6 +259,14 @@ class InLineAttention(nn.Module):
         if self.phi is not None:
             q = self.phi(q)
             k = self.phi(k)
+
+        q_norm = q.norm(dim=-1, keepdim=True)
+        k_norm = k.norm(dim=-1, keepdim=True)
+        q = q ** focusing_factor
+        k = k ** focusing_factor
+        q = (q / q.norm(dim=-1, keepdim=True)) * q_norm
+        k = (k / k.norm(dim=-1, keepdim=True)) * k_norm
+        
         q = q.reshape(b, n, num_heads, head_dim).permute(0, 2, 1, 3)
         k = k.reshape(b, n, num_heads, head_dim).permute(0, 2, 1, 3)
         v = v.reshape(b, n, num_heads, head_dim).permute(0, 2, 1, 3)
